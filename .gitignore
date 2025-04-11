@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Environment
+.env
+venv/
+capstoneVenv/
+
+# VSCodeなどの設定
+.vscode/
+
+# Django migrations
+**/migrations/
