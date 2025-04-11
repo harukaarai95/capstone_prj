@@ -6,7 +6,6 @@ __pycache__/
 # Environment
 .env
 venv/
-capstoneVenv/
 
 # VSCodeなどの設定
 .vscode/
