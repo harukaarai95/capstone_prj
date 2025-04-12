@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+    {% block title %}
+    {% endblock %}
+    </title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    {% comment %} font {% endcomment %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+    {% comment %} font awesome {% endcomment %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    {% comment %} Flowbite {% endcomment %}
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.1/dist/flowbite.min.css" rel="stylesheet" />
+    {% comment %} Swiper {% endcomment %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    {% comment %} Tailwind {% endcomment %}
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    {% comment %} Custome CSS {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  </head>
+  {% load i18n %}
+  <body class="flex flex-col min-h-[100dvh]">
+   {% block nav %}
+   {% endblock nav %}
+    <main class="relative flex-1">
+      {% block top_content %}
+      {% endblock top_content%}
+      {% block main_content %}
+      {% endblock main_content%}
+    </main>
+    {% block footer %}
+    <footer class="bg-[#FBE0DD] py-[30px] w-full">
+      <ul>
+         <li>footer</li>
+      </ul>
+    </footer>
+    {% endblock footer %}
+  </body>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.1/dist/flowbite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="{% static 'script/swiper-init.js' %}"></script>
+<script src="{% static 'script/script.js' %}"></script>
+{% block js %}{% endblock js %}
+</html>
