@@ -41,10 +41,10 @@ class User(AbstractUser):
         (CUSTOMER, 'CUSTOMER'),
         )
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default="CUSTOMER")
-    joined_date = models.DateField(auto_now=True)
+    joined_on = models.DateField(auto_now=True)
 
     class Meta:
-        ordering = ['-joined_date']
+        ordering = ['-joined_on']
     
     def get_absolute_url(self):
         return reverse("user_detail", kwargs={"pk": self.pk})

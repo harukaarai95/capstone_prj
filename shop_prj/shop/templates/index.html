@@ -1,26 +1,165 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <title>Title</title>
-        <!-- Required meta tags -->
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}
+Home
+{% endblock %}
+{% block nav %}
+<div class="main-bg-wrap relative w-full h-[240px] lg:h-[400px] bg-center bg-cover" style="background-image: url('{% static 'assets/bg.webp' %}');">
+   <div class="absolute top-0 left-0 w-full h-full nav-wrap flex flex-col items-center">
+      <header class="w-full h-auto">
+         <h1 class="mt-20 text-center text-5xl lg:text-8xl">Variety Shop</h1>
+        {% comment %} for mobile menu {% endcomment %}
+        <div class="lg:hidden fixed top-4 left-4 p-4 z-101">
+            <button id="hamburger" class="text-white text-3xl">
+              <i class="fa fa-bars openBar"></i>
+              <i class="fa-regular fa-circle-xmark closeIcon hiddenJs"></i>
+            </button>
+        </div>
+        <div id="menu" class="lg:hidden fixed top-0 left-0 w-full h-full bg-opacity-50 hiddenJs">
+            <ul class="flex flex-col items-center justify-start text-lg pt-25">
+              <li class="block w-60">
+                <a href="{% url "home" %}" class="w-full flex items-center justify-between">
+                    <span class="flex gap-4 items-center justify-between">
+                        <i class="fa-solid fa-house"></i>
+                        {% trans "Home"%}
+                    </span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+               </li>
+               <li class="block w-60">
+                <a href="" class="w-full flex items-center justify-between">
+                    <span class="flex gap-4 items-center justify-between">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        {%trans "Goods"%}
+                    </span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+               </li>
+               <li class="block w-60">
+                <a href="" class="w-full flex items-center justify-between">
+                    <span class="flex gap-4 items-center justify-between">
+                        <i class="fa-solid fa-bell-concierge"></i>
+                        {% trans "Order History"%}
+                    </span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+               </li>
+               {% if user.is_authenticated %}
+                <li class="block w-60">
+                    <a href="" class="w-full flex items-center justify-between">
+                        <span class="flex gap-4 items-center justify-between">
+                            <i class="fa-solid fa-user"></i>
+                            {% trans "Profile"%}
+                        </span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                   </li>
+                {% endif %}
+            </ul>
+            <ul class="flex items-center justify-center gap-5 mt-10">
+                <li><a href="" class="py-4 flex gap-4 items-center justify-center">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>{% trans "Cart"%}</span>
+                    </a>
+                </li>
+                <li> 
+                    <a href="{% if user.is_authenticated %}{% url "logout" %}{% else %}{% url "login" %}{% endif %}" class="py-4 flex gap-4 items-center justify-center">
+                        <i class="fa-solid fa-bone"></i>
+                        {% if user.is_authenticated %}
+                        <span>{% trans "Logout"%}</span>
+                        {% else %}
+                        <span>{% trans "Login"%}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
 
-    </head>
+        </div>
+        {% comment %} for mobile cart {% endcomment %}
+        <div class="lg:hidden absolute top-8 right-4 z-90">
+            <a href=""><i class="fa-solid fa-cart-shopping fa-xl"></i></a>
+        </div>
+         {% comment %} for desktop {% endcomment %}
+         <ul class="hidden lg:flex absolute top-15 right-20 items-center justify-center gap-8 w-60 h-15 nav-i-wrap">
+            <li><a href="#" class="flex flex-col items-center gap-2 transition-colors duration-500"><i class="fa-solid fa-magnifying-glass fa-xl"></i><span>{% trans "Search"%}</span></a></li>
+         </ul>
+         <ul class="hidden h-full w-full lg:flex justify-center items-center main-nav">
+            <li class="w-full text-center text-xl"><a href="" class="transition-colors duration-500">About</a></li>
+            <li class="w-full text-center text-xl"><a href="" class="transition-colors duration-500">Goods</a></li>
+            <li class="w-full text-center text-xl"><a href="#" class="transition-colors duration-500">{% trans "Cart"%}</a></li>
+            {% if user.is_authenticated %}
+            <li class="w-full text-center text-xl"><a href="" class="transition-colors duration-500">{% trans "Profile"%}</a></li>
+            <li class="w-full text-center text-xl"><a href="{% url "logout" %}" class="transition-colors duration-500">{% trans "Logout"%}</a></li>
+            {% else %}
+            <li class="w-full text-center text-xl"><a href="{% url "login" %}" class="transition-colors duration-500">{% trans "Login"%}</a></li>
+            {% endif %}
+         </ul>
+      </header>
+   </div>
+</div>
+{% endblock %}
 
-    <body>
-        <header>
-            <!-- place navbar here -->
-        </header>
-        <main>
-            <h1>Test</h1>
-        </main>
-        <footer>
-            <!-- place footer here -->
-        </footer>
+{% block top_content %}
+<div class="content-wrap pt-8 pb-4">
+    <h2 class="text-4xl">
+        About
+    </h2>
+</div>
+{% endblock top_content %}
+{% block main_content %}
+<div class="relative bottom-17 w-full ">
+    <div class="flex flex-col items-center justify-center">
+        <div class="p-3 flex flex-col lg:flex-row items-center justify-center lg:gap-3">
+            <img class="w-3xs h-auto object-cover p-3 rounded-full bg-[#ea7956]" src="{% static "assets/dog_smile.webp" %}">
+            <div class="text-center">
+                <h3 class="text-xl lg:text-2xl lg:mb-3">{% trans "Malpoo Annzu &amp; Original Designs." %}</h3>
+                <p>We creates designs inspired by a furry friend, Annzu. Enjoy your life with warm and natural design goods.</p>
+            </div>
+        </div>
+    </div>
+    <h4 class="my-4 text-center text-xl">{% trans "Featured Items" %}</h4>
+    <div class="home mx-auto lg:flex lg:flex-col lg:items-center lg:gap-4">
+        {% for product in featured_products %}
+        <div class="w-full p-wrap mb-5 {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+                {% with images=product.images.all %}
+                    {% if images.count > 1 %}
+                        <div class="swiper-1 swiper rounded-xl bg">
+                            <div class="swiper-wrapper">
+                                {% for image in product.images.all %}
+                                <div class="swiper-slide rounded-lg">
+                                        {% if image.is_slider_image %}
+                                                <img class="object-contain" src="{{ image.image.url }}" alt="{{ image.alt }}">
+                                        {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    {% else %}
+                        {% for image in images %}
+                        <div class="rounded-xl bg w-[100%] pt-5 max-w-[320px] lg:max-w-[400px] mx-auto">
+                            <div class="wrapper">
+                                {% for image in product.images.all %}
+                                <div class="swiper-slide rounded-lg">
+                                        {% if image.is_slider_image %}
+                                                <img class="object-contain" src="{{ image.image.url }}" alt="{{ image.alt }}">
+                                        {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                       {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            <div class="m-2 dcrpt">
+                <h5 class="text-center font-bold">{{product.pname}}</h5>
+                <p class="px-4 lg:w-lg">{{product.description}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+</div>
+{% endblock main_content %}
 
-    </body>
-</html>

@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}
+{% trans "Login"%}
+{% endblock %}
+
+
+
+
+{% block top_content %}
+<div class="content-wrap pt-8 pb-4">
+<h2 class="mt-5 text-center text-5xl">{%trans "Login"%}</h2>
+</div>
+{% endblock top_content %}
+
+{% block main_content %}
+<div class="relative bottom-17 w-full ">
+  <div class="w-full mt-5 py-2 px-4 text-center">
+  <p>{{ message }}</p>
+  <div class="flex flex-column w-full justify-center align-center">
+    <form method="post" class="pt-6 pb-8 mb-4">
+        {% csrf_token %}
+        <div class="mb-4 text-start">
+          {{ form.email.label_tag }}
+          {{ form.email }}
+        </div>
+        <div class="mb-6 text-start">
+          {{ form.password.label_tag }}
+          {{ form.password }}
+        </div>
+    <div class="text-end">
+        <button class="bg-emerald-400 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+          {% trans "login" %}
+        </button>
+    </div>
+    </form>
+  </div>
+  <div class="flex gap-2 lg:gap-15 justify-center align-center lg:w-full">
+    <div class="border-b-2 border-dotted"><a href="{% url 'signup' %}" class=" block mt-8 mx-7 lg:mx-0">{% trans "Sign up from here"%}</a></div>
+    <div class="border-b-2 border-dotted"><a href="{% url 'password_reset' %}" class=" block mt-8 mx-7 lg:mx-0">{% trans "Forget Password?"%}</a></div>
+  </div>
+  </div>
+</div>
+  {% endblock main_content %}

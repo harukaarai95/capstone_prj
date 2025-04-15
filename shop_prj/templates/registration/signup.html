@@ -1,0 +1,78 @@
+{% extends "index.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}
+Sign Up
+{% endblock %}
+{% block top_content %}
+<div class="content-wrap pt-8 pb-4">
+    <h2 class="text-4xl">
+        Sign Up
+    </h2>
+</div>
+{% endblock top_content %}
+{% block main_content %}
+<div class="w-full flex justify-center py-4 px-4">
+    <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 space-y-4">
+        {% if form.errors %}
+            <div class="bg-red-100 text-red-600 p-3 rounded mb-4">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div class="flex items-center space-x-4">
+                <label for="email" class="block text-sm font-medium text-gray-700 w-18">{% trans "Email:"%}</label>
+                <div class="border border-gray-300">{{ form.email }}</div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="username" class="block text-sm font-medium text-gray-700 w-18">{% trans "Username:"%}</label>
+                <div class="border border-gray-300">{{ form.username }}</div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="first_name" class="block text-sm font-medium text-gray-700">{% trans "First name:"%}</label>
+                <div class="border border-gray-300">{{ form.first_name }}</div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="last_name" class="block text-sm font-medium text-gray-700">{% trans "Last name:"%}</label>
+                <div class="border border-gray-300">{{ form.last_name }}</div>
+            </div>
+
+            {% if request.user.is_authenticated and request.user.role in "STAFF OWNER" %}
+                    <div class="flex items-center space-x-4">
+                        <label for="role" class="block text-sm font-medium text-gray-700">{% trans "Role:" %}</label>
+                        <div class="border border-gray-300">{{ form.role }}</div>
+                    </div>
+            {% endif %}
+            <div class="flex items-center space-x-4">
+                <label for="postal_code" class="block text-sm font-medium text-gray-700">{% trans "Postacl code:"%}</label>
+                <div class="border border-gray-300">{{ form.postal_code }}</div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="address" class="block text-sm font-medium text-gray-700">{% trans "Address:"%}</label>
+                <div class="border border-gray-300">{{ form.address }}</div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <label for="address" class="block text-sm font-medium text-gray-700">{% trans "Password:"%}</label>
+                <div class="border border-gray-300">{{ form.password1 }}</div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <label for="address" class="block text-sm font-medium text-gray-700">{% trans "Re-enter Password"%}</label>
+                <div class="border border-gray-300">{{ form.password2 }}</div>
+            </div>
+
+            <div class="flex justify-center">
+                <button type="submit" class="w-sm bg-emerald-400 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    {% trans "Sign Up"%}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock%}

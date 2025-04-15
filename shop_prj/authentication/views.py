@@ -15,7 +15,7 @@ from authentication.models import User
 from . import forms
 from .forms import CustomSetPasswordForm
 
-def login_page(request):
+def login_view(request):
     message = ""
     form = forms.LoginForm()
 
@@ -26,12 +26,14 @@ def login_page(request):
                 email=form.cleaned_data['email'],
                 password=form.cleaned_data['password']
             )
-            if user is not None:
+            if user is not None and user.role != 'CUSTOMER':
                 login(request, user)
                 message = _("Login success!")
-                print("Authenticated user:", request.user)
-                print("Is authenticated:", request.user.is_authenticated)
-                return redirect('index')
+                return redirect('staff_home')
+            elif user is not None and user.role == 'CUSTOMER':
+                login(request, user)
+                message = _("Login success!")
+                return redirect('home')
             else:
                 message = _("Login Failed")
 
@@ -40,12 +42,12 @@ def login_page(request):
     )
 
 @login_required
-def logout_user(request):
+def logout_view(request):
     logout(request)
     request.session.flush()
     return redirect('login')
 
-def signup_page(request):
+def signup_view(request):
     user_type = request.user.role if request.user.is_authenticated else None
     form = forms.SignupForm(user_type=user_type)
 
@@ -56,7 +58,7 @@ def signup_page(request):
             if not request.user.is_authenticated or request.user.role not in ["STAFF", "OWNER"]:
                 user.role = "CUSTOMER"  # set as customer
             user.save()
-            return redirect('index')
+            return redirect('home')
     
     return render(request, 'registration/signup.html', context={'form': form})
 
@@ -69,7 +71,7 @@ class UserListView(LoginRequiredMixin, generic.ListView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.role == User.CUSTOMER:
             messages.error(request, _("You do not have permission to access this page."))
-            return redirect(reverse_lazy('index'))
+            return redirect(reverse_lazy('home'))
         return super().dispatch(request, *args, **kwargs)
 
 class UserDetailView(generic.DetailView):
