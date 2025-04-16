@@ -1,0 +1,61 @@
+{% extends "staff.html" %}
+{% load i18n %}
+{% block title %}
+Product Detail
+{% endblock %}
+
+{% block top_content %}
+<div class="sm:ml-64 text-center py-2 px-2">
+    <p class="text-3xl">Product Detail</p>
+</div>
+{% endblock top_content%}
+{% block main_content %}
+<div class="sm:ml-64 p-2">
+  <table class="table-auto w-auto border mx-auto border-gray-300">
+    <tbody>
+        <tr>
+            <th class="px-4 py-2 border border-gray-300 text-left">ID</th>
+            <td class="px-4 py-2 border border-gray-300">{{ product.id }}</td>
+        </tr>
+        <tr>
+          <th class="px-4 py-2 border border-gray-300 text-left">Image 1</th>
+          <td class="px-4 py-2 border border-gray-300">
+            {% with product.images.all|first as main_image %}
+                {% if main_image %}
+                    <img src="{{ main_image.image.url }}" alt="{{ main_image.alt }}" class="w-40 h-40 object-cover">
+                {% else %}
+                    <span>No image available</span>
+                {% endif %}
+            {% endwith %}
+        </td>
+      </tr>
+        <tr>
+            <th class="px-4 py-2 border border-gray-300 text-left">Name</th>
+            <td class="px-4 py-2 border border-gray-300">{{ product.pname }}</td>
+        </tr>
+        <tr>
+            <th class="px-4 py-2 border border-gray-300 text-left">Price</th>
+            <td class="px-4 py-2 border border-gray-300">{{ product.price }}</td>
+        </tr>
+        <tr>
+            <th class="px-4 py-2 border border-gray-300 text-left">Category</th>
+            <td class="px-4 py-2 border border-sky-300">
+                {% for genre in product.genre.all %}
+                    <span class="inline-block bg-gray-200 rounded px-2 py-1 mr-1">{{ genre.name }}</span>
+                {% empty %}
+                    <span>No genre</span>
+                {% endfor %}
+            </td>
+        </tr>
+    </tbody>
+  </table>
+  <div class="flex justify-center mt-6">
+    <a href="" class="font-bold text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</a>
+    <a href="" class="font-bold text-white bg-rose-700 hover:bg-rose-800 focus:ring-4 focus:ring-rose-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-rose-600 dark:hover:bg-rose-700 focus:outline-none dark:focus:ring-rose-800">Delete</a>
+  </div>
+</div>
+{% endblock main_content%}
+
+{% block footer %}
+<footer class="h-auto  mt-30"><p class="text-center">&copy;2025 Variety Shop</p></footer>
+{% endblock footer %}

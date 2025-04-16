@@ -9,6 +9,7 @@ from .decorators import role_required
 from django.shortcuts import render, redirect
 from django.views import generic
 from authentication.models import User
+from .models import Product
 
 def home(request):
     return render(request, 'index.html')
@@ -19,14 +20,14 @@ def staff_home(request):
     return render(request, 'staff.html')
 
 
-class UserListView(LoginRequiredMixin, RoleRequiredMixin, generic.ListView):
+class ProductListView(LoginRequiredMixin, RoleRequiredMixin, generic.ListView):
     allowed_roles = ['STAFF', 'MASTER']
-    model = User
-    context_object_name = 'users'
-    template_name = 'user_list.html'
+    model = Product
+    template_name = 'product_list.html'
+    context_object_name = 'products'
 
-class UserDetailView(LoginRequiredMixin, RoleRequiredMixin, generic.DetailView):
+class ProductDetailView(LoginRequiredMixin, RoleRequiredMixin, generic.DetailView):
     allowed_roles = ['STAFF', 'MASTER']
-    model = User
-    context_object_name = 'user_detail'
-    template_name = 'user_detail_for_staff.html'
+    model = Product
+    template_name = 'product_detail.html'
+    context_object_name = 'product'
