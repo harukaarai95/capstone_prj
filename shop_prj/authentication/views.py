@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from django.views import generic
 from django.views.generic import DetailView
 from django.urls import reverse_lazy
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from authentication.models import User
@@ -73,7 +73,7 @@ class UserDetailView(LoginRequiredMixin, RoleRequiredMixin, generic.DetailView):
     allowed_roles = ['STAFF', 'MASTER']
     model = User
     template_name = 'authentication/user_detail.html'
-    context_object_name = 'user_detail'
+    context_object_name = 'user'
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
@@ -100,3 +100,24 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     form_class = CustomSetPasswordForm
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    template_name = 'authentication/user_confirm_delete.html'
+    context_object_name = 'user'
+
+    def get_success_url(self):
+        if self.request.user.role == User.CUSTOMER:
+            return reverse_lazy('home')
+        return reverse_lazy('user_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        
+        if request.user.role == User.CUSTOMER and request.user.pk != obj.pk:
+            raise PermissionDenied(_("You can only delete your own account."))
+        
+        if request.user.role == User.MASTER or request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        
+        raise PermissionDenied(_("You do not have permission to delete this user."))

@@ -1,0 +1,46 @@
+{% extends "staff.html" %}
+{% load i18n %}
+{% block title %}
+User Delete
+{% endblock %}
+
+{% block top_content %}
+<div class="sm:ml-64 text-center py-2 px-2">
+    <p class="text-3xl">User Delete</p>
+</div>
+{% endblock top_content%}
+{% block main_content %}
+<div class="sm:ml-64 p-2">
+    <div class="p-4 border border-red-300 bg-red-50 text-center">
+        <h2 class="text-xl font-bold mb-4">Are you sure to delete this account?</h2>
+        <div class="text-start mb-4 flex justify-center">
+            <table class="table-auto">
+                <tbody>
+                    <tr>
+                        <td class="text-lg"><strong>ID:</strong></td>
+                        <td class="text-lg">{{user.id}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-lg"><strong>Email:</strong></td>
+                        <td class="text-lg">{{user.email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-lg"><strong>Username: </strong></td>
+                        <td class="text-lg"> {{user.username}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="font-bold bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Delete</button>
+          <a href="{% url 'user_list' %}" class="font-bold ml-2 px-4 py-2 rounded text-white bg-emerald-600 hover:bg-emerald-700">Cancel</a>
+        </form>
+      </div>
+</div>
+{% endblock main_content%}
+
+{% block footer %}
+<footer class="h-auto  mt-30"><p class="text-center">&copy;2025 Variety Shop</p></footer>
+{% endblock footer %}
