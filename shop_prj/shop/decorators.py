@@ -19,6 +19,6 @@ def role_required(allowed_roles=[]):
 # from .decorators import role_required
 
 # @login_required
-# @role_required(allowed_roles=['STAFF', 'OWNER'])
+# @role_required(allowed_roles=['STAFF', 'MASTER'])
 # def staff_home(request):
 #     return render(request, 'staff.html')

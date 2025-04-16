@@ -6,7 +6,7 @@ from .views import CustomPasswordResetConfirmView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('users/', views.UserListView.as_view(), name='users'),
+    path('users/', views.UserListView.as_view(), name='user_list'),
     path('users/<int:pk>', views.UserDetailView.as_view(), name='user_detail'),
     path('users/<int:pk>/edit/', views.UserUpdateView.as_view(), name='user_edit'),
     path('password-reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),

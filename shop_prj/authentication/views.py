@@ -14,6 +14,7 @@ from django.core.exceptions import PermissionDenied
 from authentication.models import User
 from . import forms
 from .forms import CustomSetPasswordForm
+from shop.mixins import RoleRequiredMixin
 
 def login_view(request):
     message = ""
@@ -62,19 +63,14 @@ def signup_view(request):
     
     return render(request, 'registration/signup.html', context={'form': form})
 
-# for admin user
-class UserListView(LoginRequiredMixin, generic.ListView):
+class UserListView(LoginRequiredMixin, RoleRequiredMixin, generic.ListView):
+    allowed_roles = ['STAFF', 'MASTER']
     model = User
     template_name = 'authentication/user_list.html'
-    context_object_name = 'user'
+    context_object_name = 'users'
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.role == User.CUSTOMER:
-            messages.error(request, _("You do not have permission to access this page."))
-            return redirect(reverse_lazy('home'))
-        return super().dispatch(request, *args, **kwargs)
-
-class UserDetailView(generic.DetailView):
+class UserDetailView(LoginRequiredMixin, RoleRequiredMixin, generic.DetailView):
+    allowed_roles = ['STAFF', 'MASTER']
     model = User
     template_name = 'authentication/user_detail.html'
     context_object_name = 'user_detail'
@@ -83,20 +79,21 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'authentication/user_edit.html'
     fields = ['username', 'first_name', 'last_name', 'email', 'postal_code', 'address', 'role']
-    success_url = reverse_lazy('users')
-    def get_form(self, *args, **kwargs):# drop role if the logged in user is customer
+    success_url = reverse_lazy('user_list')
+
+    def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
-        if self.request.user.role == User.CUSTOMER:
+        if self.request.user.role != User.MASTER:
             form.fields.pop('role')
         return form
-    
+
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
 
         if request.user.role == User.CUSTOMER and request.user.pk != obj.pk:
             raise PermissionDenied(_("You can only edit your own information."))
-        
-        if request.user.role == User.MASTER or User.STAFF or request.user.is_superuser:
+
+        if request.user.role in [User.MASTER, User.STAFF] or request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
 
         raise PermissionDenied(_("You do not have permission to access this page."))

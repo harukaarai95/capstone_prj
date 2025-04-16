@@ -18,5 +18,5 @@ class RoleRequiredMixin:
 # from .mixins import RoleRequiredMixin
 
 # class StaffOnlyView(LoginRequiredMixin, RoleRequiredMixin, TemplateView):
-#     allowed_roles = ['STAFF', 'OWNER']
+#     allowed_roles = ['STAFF', 'MASTER']
 #     template_name = 'staff_page.html'

@@ -1,27 +1,87 @@
-{% extends "customer.html" %}
+{% extends "staff.html" %}
 {% load i18n %}
 
 {% block title %}
-Profile | Annzu life
+Edit User Info
+{% endblock %}
+{% block nav %}
+    <div class="flex">
+        <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-sky-700 dark:focus:ring-gray-600">
+        <span class="sr-only">Open sidebar</span>
+        </button>
+        
+        <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+        <div class="h-full px-3 py-6 overflow-y-auto bg-sky-50 dark:bg-sky-800 text-center">
+            <ul class="space-y-2 font-medium text-start">
+                <li>User: {{user.get_username}}</li>
+                <li>
+                    <a href="{% url "staff_home" %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-sky-100 dark:hover:bg-sky-700 group">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span class="ms-3">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-sky-100 dark:hover:bg-sky-700 group">
+                        <i class="fa-solid fa-users"></i>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-sky-100 dark:hover:bg-sky-700 group">
+                        <i class="fa-solid fa-gifts"></i>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Products</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-sky-100 dark:hover:bg-sky-700 group">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Genres</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-sky-100 dark:hover:bg-sky-700 group">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Carts</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'login' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-sky-100 dark:hover:bg-sky-700 group">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Log In</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'signup' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-sky-100 dark:hover:bg-sky-700 group">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'logout' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-sky-100 dark:hover:bg-sky-700 group">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Log Out</span>
+                    </a>
+                </li>
+            </ul>            
+        </div>
+        </aside>
+    </div>
 {% endblock %}
 
 {% block top_content %}
-<div class="content-wrap pt-8 pb-4">
-    <h1 class="text-4xl">
-        {% trans "Profile"%}
-    </h1>
+<div class="sm:ml-64 text-center py-2 px-2">
+    <p class="text-3xl">User Detail</p>
 </div>
-{% endblock top_content %}
+{% endblock top_content%}
 {% block main_content %}
-<div class="relative bottom-17 w-full ">
-<h2 class="font-bold">{% trans "Edit User Infomation"%}</h2>
-<div class="w-full flex flex-col items-center border">
-    <form method="post" class="text-start">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
-        <a href="{% url 'users' %}" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Cancel</a>
-    </form>
-</div>
+<div class="sm:ml-64 p-2">
+    <div class="flex w-[100%] flex-col items-center border border-gray-300 p-4">
+        <form method="post" class="text-start space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
+            <a href="{% url 'user_list' %}" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Cancel</a>
+        </form>
+    </div>
 </div>
 {% endblock %}
