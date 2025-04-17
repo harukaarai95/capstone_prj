@@ -14,7 +14,7 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy, reverse
 from .forms import ProductForm, ImageForm, GenreForm
 from django.forms import modelformset_factory, inlineformset_factory
-
+from django.db.models import Count
 
 def home(request):
     return render(request, 'index.html')
@@ -134,3 +134,60 @@ class ProductDeleteView(LoginRequiredMixin, RoleRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('products')
+    
+class CreateGenreView(LoginRequiredMixin, RoleRequiredMixin, CreateView):
+    allowed_roles = ['STAFF', 'MASTER']
+    model = Genre
+    form_class = GenreForm
+    template_name = 'genre_create.html'
+    success_url = reverse_lazy('genres')
+
+    def form_valid(self, form):
+        form.instance.image = self.request.FILES.get('image')
+        return super().form_valid(form)
+    
+class GenreListView(LoginRequiredMixin, generic.ListView):
+    model = Genre
+    template_name = 'genre_list.html'
+    context_object_name = 'genres'
+
+    def get_queryset(self):
+        return Genre.objects.annotate(product_count=Count('products'))
+    
+class GenreDetailView(LoginRequiredMixin, RoleRequiredMixin, generic.DetailView):
+    allowed_roles = ['STAFF', 'MASTER']
+    model = Genre
+    template_name = 'genre_detail.html'
+    context_object_name = 'genre'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        genre = self.get_object()
+        context['image'] = genre.image
+        return context
+    
+class EditGenreView(LoginRequiredMixin, RoleRequiredMixin, UpdateView):
+    allowed_roles = ['STAFF', 'MASTER']
+    model = Genre
+    form_class = GenreForm
+    template_name = 'genre_update.html'
+    success_url = reverse_lazy('genres')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['genre'] = self.get_object()
+        context['genre_form'] = self.get_form()
+        return context
+
+class DeleteGenreView(LoginRequiredMixin, RoleRequiredMixin, DeleteView):
+    allowed_roles = ['STAFF', 'MASTER']
+    model = Genre
+    template_name = 'genre_confirm_delete.html'
+    context_object_name = 'genre'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('genres')

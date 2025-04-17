@@ -1,0 +1,55 @@
+{% extends "staff.html" %}
+{% load i18n %}
+{% block title %}
+Categories
+{% endblock %}
+
+{% block top_content %}
+<div class="sm:ml-64 text-center py-2 px-2">
+    <p class="text-3xl">Categories</p>
+</div>
+{% endblock top_content%}
+{% block main_content %}
+<div class="sm:ml-64 p-2">
+    <div class="text-end mx-[8%]"><a href="{% url "genre_add" %}" class="block"><i class="fa-solid fa-square-plus fa-2xl hover:text-sky-800"></i></a></div>
+</br>
+    {% if genres %}
+    <div class="flex justify-center">
+        <table class="table-auto w-[80%] border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2 border border-gray-300">ID</th>
+                    <th class="px-4 py-2 border border-gray-300">Category Image</th>
+                    <th class="px-4 py-2 border border-gray-300">Name</th>
+                    <th class="px-4 py-2 border border-gray-300">Items registered</th>
+                    <th class="px-4 py-2 border border-gray-300">See More</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for genre in genres %}
+                <tr>
+                  <td class="px-4 py-2 border border-gray-300">{{genre.id}}</td>
+                  <td class="px-4 py-2 border border-gray-300">
+                        {% if genre.image %}
+                            <div class="flex justify-center"><img src="{{genre.image.url }}" alt="{{genre}}" class="block w-[150px] object-cover"></div>
+                        {% else %}
+                            <p>No image available</p>
+                        {% endif %}
+                  </td>
+                    <td class="px-4 py-2 border border-gray-300">{{genre.name}}</td>
+                    <td class="px-4 py-2 border border-gray-300">{{genre.product_count}}</td>
+                    <td class="px-4 py-2 border border-gray-300 text-center hover:text-sky-800"><a href="{% url "genre_detail" genre.pk%}"><i class="fa-solid fa-square-pen"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>There are 0 categories in the record.</p>
+    {% endif %}
+</div>
+{% endblock main_content%}
+
+{% block footer %}
+<footer class="h-auto  mt-30"><p class="text-center">&copy;2025 Variety Shop</p></footer>
+{% endblock footer %}
