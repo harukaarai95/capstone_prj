@@ -1,0 +1,31 @@
+{% extends "staff.html" %}
+
+{% block top_content %}
+<div class="sm:ml-64 text-center py-2 px-2">
+    <h2 class="font-bold text-2xl">Add New Product</h2>
+</div>
+{% endblock %}
+
+{% block main_content %}
+<div class="flex justify-center sm:ml-64 py-2 px-2">
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        <h3 class="font-bold text-lg">Product Information</h3>
+        <table>
+        {{ product_form.as_table }}
+        </table>
+        <br>
+
+        <h3 class="font-bold">Upload Product Images</h3>
+        {{ image_formset.management_form }}
+        
+        {% for form in image_formset %}
+            <div>
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+        
+        <button type="submit" class="border">Add Product</button>
+    </form>
+</div>
+{% endblock %}

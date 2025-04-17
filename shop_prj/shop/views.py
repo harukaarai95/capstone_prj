@@ -6,10 +6,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixins import RoleRequiredMixin
 from .decorators import role_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from authentication.models import User
-from .models import Product
+from .models import Product, ProductImage, Genre
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
+from django.urls import reverse_lazy, reverse
+from .forms import ProductForm, ImageForm, GenreForm
+from django.forms import modelformset_factory, inlineformset_factory
+
 
 def home(request):
     return render(request, 'index.html')
@@ -19,6 +24,37 @@ def home(request):
 def staff_home(request):
     return render(request, 'staff.html')
 
+class CreateProductView(LoginRequiredMixin, RoleRequiredMixin, generic.CreateView):
+    allowed_roles = ['STAFF', 'MASTER']
+    model = Product
+    form_class = ProductForm
+    template_name = 'product_create.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product_form'] = self.get_form(ProductForm)
+
+        product = context.get('product', None) or Product()
+
+        ImageFormSet = inlineformset_factory(Product, ProductImage, form=ImageForm, extra=2)
+
+        if product:
+            context['image_formset'] = ImageFormSet(instance=product)
+        else:
+            context['image_formset'] = ImageFormSet()
+
+        return context
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        product = self.object
+        ImageFormSet = inlineformset_factory(Product, ProductImage, form=ImageForm, extra=1)
+        image_formset = ImageFormSet(self.request.POST, self.request.FILES, instance=product)
+
+        if image_formset.is_valid():
+            image_formset.save()
+
+        return response
 
 class ProductListView(LoginRequiredMixin, RoleRequiredMixin, generic.ListView):
     allowed_roles = ['STAFF', 'MASTER']
@@ -31,3 +67,70 @@ class ProductDetailView(LoginRequiredMixin, RoleRequiredMixin, generic.DetailVie
     model = Product
     template_name = 'product_detail.html'
     context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        context['images'] = product.images.all()
+        return context
+
+@login_required
+@role_required(allowed_roles=['STAFF', 'MASTER'])
+def edit_product(request, pk):
+    
+    product = get_object_or_404(Product, pk=pk)
+    images = product.images.all()
+
+
+    if request.method == 'POST':
+        product_form = ProductForm(request.POST, instance=product)
+        image_form = ImageForm(request.POST, request.FILES, product=product)
+
+        if product_form.is_valid():
+            product_form.save()
+
+        if 'add_image' in request.POST and image_form.is_valid():
+            new_image = image_form.save(commit=False)
+            new_image.Product = product
+            new_image.save()
+            return redirect('product_edit', pk=pk)
+
+        if 'edit_image' in request.POST:
+            image_id = request.POST.get('image_id')
+            image = get_object_or_404(ProductImage, id=image_id)
+            image_form = ImageForm(request.POST, request.FILES, instance=image, product=product)
+            if image_form.is_valid():
+                image_form.save()
+                return redirect('product_edit', pk=pk)
+
+        if 'delete_image' in request.POST:
+            image_id = request.POST.get('image_id')
+            image = get_object_or_404(ProductImage, id=image_id)
+            image.delete()
+            return redirect('product_edit', pk=pk)
+
+    else:
+        product_form = ProductForm(instance=product)
+        image_form = ImageForm(product=product)
+
+    return render(request, 'product_edit.html', {
+        'product': product,
+        'product_form': product_form,
+        'image_form': image_form,
+        'images': images,
+    })
+
+class ProductDeleteView(LoginRequiredMixin, RoleRequiredMixin, DeleteView):
+    allowed_roles = ['STAFF', 'MASTER']
+    model = Product
+    template_name = 'product_confirm_delete.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        context['images'] = product.images.all()
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('products')

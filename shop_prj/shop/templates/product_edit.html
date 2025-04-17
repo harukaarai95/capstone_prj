@@ -1,0 +1,84 @@
+{% extends "staff.html" %}
+{% load i18n %}
+
+{% block title %}
+Edit Prodcut
+{% endblock %}
+
+{% block top_content %}
+<div class="sm:ml-64 text-center py-2 px-2">
+    <p class="text-3xl">{{product.pname}}</p>
+</div>
+{% endblock top_content%}
+{% block main_content %}
+
+{% if image_formset.errors %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+        {% for form in image_formset %}
+            {% for error in form.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+</div>
+{% endif %}
+
+<div class="sm:ml-64 p-2 flex items-center flex-col">
+    <form method="POST" enctype="multipart/form-data" class="space-y-4 mt-2">
+        {% csrf_token %}
+        {{ product_form }}
+        {% for field in form %}
+        <div class="flex items-start gap-4 mb-4">
+        <label for="{{ field.id_for_label }}" class="w-32 text-sm font-medium text-gray-700 pt-2">
+            {{ field.label }}
+        </label>
+        <div class="flex-1">
+            {{ field }}
+            {% if field.help_text %}
+            <p class="text-xs text-gray-500">{{ field.help_text }}</p>
+            {% endif %}
+            {% for error in field.errors %}
+            <p class="text-xs text-red-500">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+    {% endfor %}
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save</button>
+    </form>
+    <br>
+    <h2 class="font-bold text-lg">Existing Images</h2>
+    {% for image in images %}
+        <div class="border border-gray-300 p-2 mt-2">
+            <img src="{% if image.image %}{{ image.image.url }}{% else %}/media/images/snowman.png{% endif %}" alt="{{ image.alt }}" class="w-32 h-32 object-cover">
+            <form method="POST" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                <input type="hidden" name="image_id" value="{{ image.id }}">
+                {{ image_form.as_p }}
+                <button type="submit" name="edit_image" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Image</button>
+            </form>
+            
+            <form method="post" class="inline">
+                {% csrf_token %}
+                <input type="hidden" name="image_id" value="{{ image.id }}">
+                <button type="submit" name="delete_image" class="mt-2 block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+            </form>
+        </div>
+    {% empty %}
+        <p>No images available.</p>
+    {% endfor %}
+    
+    <br>
+    
+    <!-- Image form for adding new images -->
+     <h3 class="font-bold text-lg mt-2">Add New Images</h3>
+    <form method="POST" enctype="multipart/form-data" class="space-y-4 border border-gray-300 p-2">
+        {% csrf_token %}
+        {{ image_form.as_p }}
+        <button type="submit" name="add_image" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Image</button>
+    </form>
+    <br>
+    <a href="" class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete Item</a>
+    <br>
+    <a href="{% url 'products' %}" class="underline text-blue-500">Back to Product List</a>
+    </div>
+</div>
+{% endblock %}

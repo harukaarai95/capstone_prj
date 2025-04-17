@@ -11,8 +11,11 @@ Product List
 {% endblock top_content%}
 {% block main_content %}
 <div class="sm:ml-64 p-2">
+    <div class="text-end mx-[8%]"><a href="{% url "product_add" %}" class="block"><i class="fa-solid fa-square-plus fa-2xl hover:text-sky-800"></i></a></div>
+</br>
     {% if products %}
-        <table class="table-auto w-full border border-gray-300">
+    <div class="flex justify-center">
+        <table class="table-auto w-[80%] border border-gray-300">
             <thead>
                 <tr>
                     <th class="px-4 py-2 border border-gray-300">ID</th>
@@ -27,12 +30,12 @@ Product List
                 {% for product in products %}
                 <tr>
                   <td class="px-4 py-2 border border-gray-300">{{product.id}}</td>
-                  <td>
-                    {% with item.images.first as image %}
-                        {% if image %}
-                            <img src="{{ image.image.url }}" alt="{{ image.alt }}" class="w-32 h-32 object-cover">
+                  <td class="px-4 py-2 border border-gray-300">
+                    {% with product.images.all|first as main_image %}
+                        {% if main_image %}
+                            <div class="flex justify-center"><img src="{{ main_image.image.url }}" alt="{{ main_image.alt }}" class="block w-[300px] object-cover"></div>
                         {% else %}
-                            <p>No images</p>
+                            <span>No image available</span>
                         {% endif %}
                     {% endwith %}
                   </td>
@@ -44,7 +47,7 @@ Product List
                 {% endfor %}
             </tbody>
         </table>
-
+    </div>
     {% else %}
         <p>There are 0 product in the record.</p>
     {% endif %}

@@ -11,7 +11,7 @@ Product Detail
 {% endblock top_content%}
 {% block main_content %}
 <div class="sm:ml-64 p-2">
-  <table class="table-auto w-auto border mx-auto border-gray-300">
+  <table class="table-auto w-[80%] border mx-auto border-gray-300">
     <tbody>
         <tr>
             <th class="px-4 py-2 border border-gray-300 text-left">ID</th>
@@ -20,13 +20,13 @@ Product Detail
         <tr>
           <th class="px-4 py-2 border border-gray-300 text-left">Image 1</th>
           <td class="px-4 py-2 border border-gray-300">
-            {% with product.images.all|first as main_image %}
-                {% if main_image %}
-                    <img src="{{ main_image.image.url }}" alt="{{ main_image.alt }}" class="w-40 h-40 object-cover">
+                {% if images %}
+                    {% for pic in images %}
+                    <img src="{{ pic.image.url }}" alt="{{ pic.alt }}" class="w-40 h-40 object-cover">
+                    {% endfor %}
                 {% else %}
                     <span>No image available</span>
                 {% endif %}
-            {% endwith %}
         </td>
       </tr>
         <tr>
@@ -38,10 +38,14 @@ Product Detail
             <td class="px-4 py-2 border border-gray-300">{{ product.price }}</td>
         </tr>
         <tr>
+            <th class="px-4 py-2 border border-gray-300 text-left">Description</th>
+            <td class="px-4 py-2 border border-gray-300">{{ product.description }}</td>
+        </tr>
+        <tr>
             <th class="px-4 py-2 border border-gray-300 text-left">Category</th>
-            <td class="px-4 py-2 border border-sky-300">
+            <td class="px-4 py-2 border border-gray-300">
                 {% for genre in product.genre.all %}
-                    <span class="inline-block bg-gray-200 rounded px-2 py-1 mr-1">{{ genre.name }}</span>
+                    <span class="inline-block bg-sky-200 rounded px-2 py-1 mr-1">{{ genre.name }}</span>
                 {% empty %}
                     <span>No genre</span>
                 {% endfor %}
@@ -50,9 +54,10 @@ Product Detail
     </tbody>
   </table>
   <div class="flex justify-center mt-6">
-    <a href="" class="font-bold text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</a>
-    <a href="" class="font-bold text-white bg-rose-700 hover:bg-rose-800 focus:ring-4 focus:ring-rose-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-rose-600 dark:hover:bg-rose-700 focus:outline-none dark:focus:ring-rose-800">Delete</a>
+    <a href="{% url "product_edit" product.pk %}" class="font-bold text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</a>
+    <a href="{% url "product_delete" product.pk %}" class="font-bold text-white bg-rose-700 hover:bg-rose-800 focus:ring-4 focus:ring-rose-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-rose-600 dark:hover:bg-rose-700 focus:outline-none dark:focus:ring-rose-800">Delete</a>
   </div>
+    <div class="mt-4 mx-auto w-full text-center"><a href="{% url "products" %}" class="underline text-blue-500">Go back to product list</a></div>
 </div>
 {% endblock main_content%}
 
