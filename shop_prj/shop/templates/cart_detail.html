@@ -1,0 +1,55 @@
+{% extends "index.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+{%trans "Cart Details"%} | Annzu Life
+{% endblock %}
+
+{% block top_content %}
+<div class="content-wrap pt-8 pb-4">
+<h1 class="text-2xl">{% trans "Cart" %}</h1>
+</div>
+{% endblock %}
+{% block main_content %}
+<div class="relative w-full px-[5%]">
+    {% if cart_items %}
+    <ul class="flex flex-col items-center">
+        {% for item in cart_items %}
+            <li class="flex items-center flex-col w-[80%] p-2 m-2 gap-2 border">
+                <div class="flex  items-center m-2 gap-4">
+                    <img src="{{ item.product.images.first.image.url }}" class="w-30 h-30 p-2 bg-sky-50" alt="{{item.name}}">
+                    <div>
+                        <p class="font-bold">{{ item.product.pname }}</p>
+                        <p>${{ item.product.price }}</p>
+                        <div class="flex gap-2 items-center">
+                            <p>{% trans "quantity:" %}</p>
+                            <form class="update-cart-form" data-product-id="{{ item.product.id }}" method="POST">
+                                {% csrf_token %}
+                                <input type="number" name="amount" value="{{ item.amount }}" min="1" class="w-12 p-1 border relative">
+                                <button type="submit" class="underline block absolute right-[20%]">{% trans "Save" %}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2 text-end">
+                    <a href="{% url 'purchase_item' item.product.id %}" class="underline">{% trans "Purchase" %}</a>
+                    <a href="{% url 'remove_from_cart' item.product.id %}" class="underline">{% trans "Delete" %}</a>
+                </div>               
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="mx-[10%]"><p class="text-end px-2 border-b"><strong>Total: ${{ total_price }}</strong></p></div>
+    <div class="text-center mx-[10%] my-2">
+        <a href="{% url 'purchase_all' %}" class="border block p-2 rounded">{% trans "Purchase All" %}</a>
+    </div>
+{% else %}
+    <p class="text-center">{% trans "Your cart is empty."%}</p>
+{% endif %}
+    
+</div>
+
+{% endblock %}
+{% block js %}
+<script src="{% static 'script/cart.js' %}"></script>
+{% endblock js %}

@@ -1,0 +1,56 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% block title %}
+{{product.pname}}
+{% endblock %}
+
+{% block top_content %}
+<div class="content-wrap pt-8 pb-4">
+    <h2 class="text-4xl">
+        {{product.pname}}
+    </h2>
+</div>
+{% endblock %}
+
+{% block main_content %}
+<div class="relative bottom-17 w-full ">
+    <section id="c_product_detail">
+        {% if product.images.all %}
+        <div class="swiper-4 swiper rounded-xl">                     
+            <div class="swiper-wrapper">
+                {% for image in product.images.all %}
+                    <div class="swiper-slide rounded-lg gap-2">
+                        <img class="object-contain hover:scale-110" src="{{ image.image.url }}" alt="{{ image.alt }}">
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-button-prev prev-4"></div>
+            <div class="swiper-button-next next-4"></div>
+            <div class="swiper-pagination swiper-pagination-4"></div>
+        </div>
+        {% else %}
+        <p>No images available</p>
+        {% endif %}
+    </section>
+
+    <div class="p-2 flex flex-col items-center">
+        <p>{%trans "Price:"%} {{ product.price }}</p>
+        <p class="p-2 bg-sky-50 mb-2 w-[80%]"><span class="font-bold">{%trans "Description:"%}</span> {{ product.description }}</p>
+        <p><span class="font-bold">{%trans "Category:"%}</span> {% if product.genre.all %}
+            {% for genre in product.genre.all %}{{ genre.name }}
+            {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            {% else %}{%trans "No category"%}{% endif %}</p>
+    </div>
+    <div class="flex justify-between mx-5">
+        <a href="{% url 'customer_goods' %} " class="underline">{% trans "Go back to Product list" %}</a>
+        <form action="{% url "add_to_cart" product.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="amount" value="1">
+            <button type="submit" class="block text-center shadow-sm bg-emerald-400 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded">
+                {% trans "Add to Cart" %}
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

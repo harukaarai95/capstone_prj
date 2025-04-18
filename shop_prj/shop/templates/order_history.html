@@ -1,0 +1,115 @@
+{% extends "index.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Purchase History" %} | Annzu Life
+{% endblock %}
+
+{% block top_content %}
+<div class="content-wrap pt-8 pb-4">
+    <h1 class="text-4xl">
+        Order History
+    </h1>
+</div>
+{% endblock top_content %}
+
+{% block main_content %}
+<div class="relative bottom-17 w-full">
+    <h2 class="px-2 underline">Requested Items</h2>
+    {% if requested_product_instances %}
+        <div class="overflow-x-auto">
+            <table class="mx-auto border-collapse lg:text-lg">
+                <tr>
+                    <th class="py-3 px-4 text-left">No.</th>
+                    <th class="py-3 px-4 text-center">{%trans "Item"%}</th>
+                    <th class="py-3 px-4 text-center">{% trans "Amount" %}</th>
+                    <th class="py-3 px-4 text-center">{% trans "Order date" %}</th>
+                    <th class="py-3 px-4 text-center">{% trans "Status" %}</th>
+                    <th class="py-3 px-4 text-center">{% trans "Order ID" %}</th>
+                    <th class="py-3 px-4 text-center">{% trans "See detail" %}</th>
+                </tr>
+                {% for order in requested_product_instances %}
+                <tr class="even:bg-gray-100">
+                    <td class="py-3 px-4 text-center">{{ forloop.counter }}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex flex-col items-center">
+                            <p class="font-bold">{{order.genre}}</p>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-center">{{order.amount}}</td>
+                    <td class="py-3 px-4 text-center 
+                    {% if order.status == '注文確認中' %}text-yellow-500
+                                {% elif order.status == '発送済み' %}text-green-500
+                                {% elif order.status == '受注' %}text-blue-500
+                                {% elif order.status == '作成中' %}text-orange-500
+                                {% elif order.status == '修正中' %}text-orange-500
+                                {% elif order.status == '発送中' %}text-green-500
+                                {% elif order.status == '納品' %}text-gray-700
+                                {% else %}text-gray-700{% endif %}">{{order.order_date}}</td>
+                    <td class="py-3 px-4 text-center">{{order.status}}</td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="cursor-pointer relative group" title="{{ order.id }}">
+                            <span class="block group-hover:hidden">{{ order.id.hex|slice:":5" }}...</span>
+                            <span class="hidden group-hover:block">{{ order.id }}</span>
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <a href="{%url 'chat' order.id%}">See more</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% else %}
+    <p class="text-lg">{% trans "No order history." %}</p>
+    {% endif %}
+</div>
+<h2 class="px-2 underline">Regular Items</h2>
+    {% if product_instances %}
+        <div class="overflow-x-auto">
+            <table class="mx-auto border-collapse lg:text-lg">
+                <tr>
+                    <th class="py-3 px-4 text-left">No.</th>
+                    <th class="py-3 px-4 text-center">{%trans "Item"%}</th>
+                    <th class="py-3 px-4 text-center">{% trans "Amount" %}</th>
+                    <th class="py-3 px-4 text-center">{% trans "Order date" %}</th>
+                    <th class="py-3 px-4 text-center">{% trans "Status" %}</th>
+                    <th class="py-3 px-4 text-center">{% trans "Order ID" %}</th>
+                </tr>
+                {% for order in product_instances %}
+                <tr class="even:bg-gray-100">
+                    <td class="py-3 px-4 text-center">{{ forloop.counter }}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex flex-col items-center">
+                            <p class="font-bold">{{order.product}}</p>
+                            <img class="object-contain w-20 h-20 lg:w-100 lg:h-100" src="{{order.product.images.first.image.url}}" alt="{{order.product}}">
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-center">{{order.amount}}</td>
+                    <td class="py-3 px-4 text-center 
+                    {% if order.status == '注文確認中' %}text-yellow-500
+                                {% elif order.status == '発送済み' %}text-green-500
+                                {% elif order.status == '受注' %}text-blue-500
+                                {% elif order.status == '作成中' %}text-orange-500
+                                {% elif order.status == '修正中' %}text-orange-500
+                                {% elif order.status == '発送中' %}text-green-500
+                                {% elif order.status == '納品' %}text-gray-700
+                                {% else %}text-gray-700{% endif %}">{{order.order_date}}</td>
+                    <td class="py-3 px-4 text-center">{{order.status}}</td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="cursor-pointer relative group" title="{{ order.id }}">
+                            <span class="block group-hover:hidden">{{ order.id.hex|slice:":5" }}...</span>
+                            <span class="hidden group-hover:block">{{ order.id }}</span>
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% else %}
+    <p class="text-lg">{% trans "No order history." %}</p>
+    {% endif %}
+    <p class="text-center lg:text-xl">{% trans "Need help?" %} <a href="#" class="underline">{% trans "Please contact us." %}</a></p>
+</div>
+{% endblock %}

@@ -28,7 +28,7 @@ Home
                 </a>
                </li>
                <li class="block w-60">
-                <a href="" class="w-full flex items-center justify-between">
+                <a href="{% url "customer_goods" %}" class="w-full flex items-center justify-between">
                     <span class="flex gap-4 items-center justify-between">
                         <i class="fa-solid fa-bag-shopping"></i>
                         {%trans "Goods"%}
@@ -85,9 +85,9 @@ Home
             <li><a href="#" class="flex flex-col items-center gap-2 transition-colors duration-500"><i class="fa-solid fa-magnifying-glass fa-xl"></i><span>{% trans "Search"%}</span></a></li>
          </ul>
          <ul class="hidden h-full w-full lg:flex justify-center items-center main-nav">
-            <li class="w-full text-center text-xl"><a href="" class="transition-colors duration-500">About</a></li>
-            <li class="w-full text-center text-xl"><a href="" class="transition-colors duration-500">Goods</a></li>
-            <li class="w-full text-center text-xl"><a href="#" class="transition-colors duration-500">{% trans "Cart"%}</a></li>
+            <li class="w-full text-center text-xl"><a href="{% url "home" %}" class="transition-colors duration-500">About</a></li>
+            <li class="w-full text-center text-xl"><a href="{% url "customer_goods" %}" class="transition-colors duration-500">Goods</a></li>
+            <li class="w-full text-center text-xl"><a href="{% url "c_cart_detail" %}" class="transition-colors duration-500">{% trans "Cart"%}</a></li>
             {% if user.is_authenticated %}
             <li class="w-full text-center text-xl"><a href="" class="transition-colors duration-500">{% trans "Profile"%}</a></li>
             <li class="w-full text-center text-xl"><a href="{% url "logout" %}" class="transition-colors duration-500">{% trans "Logout"%}</a></li>

@@ -28,7 +28,7 @@ Home
                 </a>
                </li>
                <li class="block w-60">
-                <a href="" class="w-full flex items-center justify-between">
+                <a href="{% url "customer_goods" %}" class="w-full flex items-center justify-between">
                     <span class="flex gap-4 items-center justify-between">
                         <i class="fa-solid fa-bag-shopping"></i>
                         {%trans "Goods"%}
@@ -121,7 +121,7 @@ Home
          </ul>
          <ul class="hidden h-full w-full lg:flex justify-center items-center main-nav">
             <li class="w-full text-center text-xl"><a href="{% url "index" %}" class="transition-colors duration-500">About</a></li>
-            <li class="w-full text-center text-xl"><a href="{% url "customer_products" %}" class="transition-colors duration-500">Goods</a></li>
+            <li class="w-full text-center text-xl"><a href="{% url "customer_goods" %}" class="transition-colors duration-500">Goods</a></li>
             <li class="w-full text-center text-xl"><a href="#" class="transition-colors duration-500">Line Stamp</a></li>
             <li class="w-full text-center text-xl"><a href="{% url 'request_original' %}" class="transition-colors duration-500">Request</a></li>
          </ul>

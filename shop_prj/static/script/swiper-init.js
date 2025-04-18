@@ -36,10 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
               spaceBetween: 30,
             }
           },
-          navigation: window.innerWidth >= 768 ? { // タブレット以上のみ適用
-            nextEl: ".next",
-            prevEl: ".prev"
-        } : false
       });
   }
 
@@ -47,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const swiper3 = new Swiper('.swiper-3', {
       loop: false,
       autoplay: false,
-      // If we need pagination
       pagination: {
         el: '.swiper-pagination-3',
         clickable: true,
@@ -66,7 +61,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const swiper4 = new Swiper('.swiper-4', {
       loop: false,
       autoplay: false,
-      // If we need pagination
       pagination: {
         el: '.swiper-pagination-4',
         clickable: true,
