@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+{%trans "Categories"%}
+{% endblock %}
+
+{% block top_content %}
+<div class="content-wrap pt-8 pb-4">
+    <h2 class="text-4xl px-2">
+        <i class="fa-solid fa-bag-shopping"></i>
+        {% trans "Search By Genres" %}
+    </h2>
+</div>
+{% endblock top_content %}
+
+{% block main_content %}
+<div class="relative w-full border px-[5%]">
+    {% if genres %}
+    <ul>
+        {% for item in genres %}
+        <li class="bg-sky-50 mb-3 rounded-lg flex justify-center items-center gap-2 h-30 py-3">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-10 object-contain">
+            {% endif %}
+            <div>
+                <p class="font-bold underline">{{ item.name }}</p>
+
+            {% if item.display_products %}
+            <ul class="w-full">
+                {% for product in item.display_products %}
+                <li class="text-center mb-2">
+                    <p class="text-sm">{{ product.pname }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-xs text-gray-500">{% trans "No products available for this genre." %}</p>
+            {% endif %}
+        </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url "customer_goods" %}">{% trans "Go back to goods" %}</a>
+    {% else %}
+    <p>{% trans "Sorry, no genres to display." %}</p>
+    {% endif %}
+</div>
+
+{% endblock main_content %}

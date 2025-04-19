@@ -82,31 +82,40 @@ Goods
     </section>
     {% if other_products %}
     <section id="normal_product_list" class="px-[5%] mt-5">
-        <h2 class="text-2xl mb-4">Other Items</h2>
-        <div class="flex gap-2">
+        <h2 class="text-2xl mb-4">Other Items | total {{ other_products|length }} items</h2>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {% for product in other_products %}
-        <div class="border rounded p-2 flex flex-col justify-center align-center hover:bg-[#DD5341]">
-            <a href="{% url "customer_goods_detail" product.pk %}">
-            {% if product.images.first %}
-                <img src="{{ product.images.first.image.url }}" alt="{{ product.pname }}" class="border object-contain w-20 h-20">
-            {% else %}
-                <p>No Image</p>
-            {% endif %}
-            <p class="text-center mt-2 font-semibold">{{product.pname}}</p>
-            <p class="text-center mt-2">$ {{ product.price }}</p>
-            </a>
-        </div>
-        </div>
+        <a href="{% url "customer_goods_detail" product.pk %}" class="{% if forloop.counter > 4 %} hidden more-item {% endif %}">
+            <div class="rounded bg-cyan-200 transition-transform duration-300 hover:scale-105 hover:bg-cyan-400 shadow-sm p-2 w-full lg:mt-3 lg:mx-4 lg:flex lg:justify-center lg:gap-4">
+                <span class="flex flex-col items-center">
+                {% if product.images.first %}
+                    <img src="{{ product.images.first.image.url }}" alt="{{ product.pname }}" class="border bg-white border-stone-400 rounded object-contain w-24 h-24">
+                {% else %}
+                    <p>No Image</p>
+                {% endif %}
+                <p class="text-center font-semibold">{{product.pname}}</p>
+                <p class="text-center">$ {{ product.price }}</p>
+                </span>
+            </div>
+        </a>
         {% endfor %}
+        {% if other_products|length > 4 %}
+        <br>
+        <div class="col-span-2 lg:col-span-4 flex justify-center w-full mt-2">
+            <button id="toggleBtn" class="block mt-4 w-32 h-10 text-md text-center shadow-sm bg-cyan-100 hover:bg-cyan-200 font-bold py-2 px-4 rounded mb-4">
+                See More
+            </button>
+        </div>
+        {% endif %}
     {% endif %}
     </section>
-    <section id="ctgry-search" class="px-[5%] mt-5">
+    <section id="ctgry-search" class="px-[5%]">
         <h2 class="underline py-2 text-3xl text-center my-2">{% trans "Search By Category" %}</h2>
         {% comment %} top 3 genres to display {% endcomment %}
         <div class="text-center">
-            <ul class="lg:mt-3 lg:flex lg:justify-center lg:gap-4">
+            <ul class="lg:mt-3 lg:mx-4 lg:flex lg:justify-center lg:gap-4">
                 {% for genre in genre_count %}
-                    <a href="{{genre.get_absolute_url}}">
+                    <a href="{% url "customer_genre_detail" genre.pk %}">
                         <li class="bg-[#FFCBC5] hover:bg-[#DD5341] shadow-sm block p-2 rounded-lg flex items-center lg:justify-center lg:w-md gap-3 mb-3">
                             {% if genre.image %}
                             <img src="{{genre.image.url}}" alt="{{genre.name}}" class="object-contain w-20 h-20 rounded-full border border-[#332618] bg-white">
@@ -118,7 +127,7 @@ Goods
                 {% endfor %}
             </ul>
 
-            <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="mt-4 inline-block w-32 text-md text-center shadow-sm bg-[#FBE0DD] hover:bg-[#DD5341] font-bold py-2 px-4 rounded" type="button">
+            <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="mt-4 inline-block w-32 text-md text-center shadow-sm bg-[#FBE0DD] hover:bg-[#DD5341] font-bold py-2 px-4 rounded mb-4" type="button">
                 {% trans "See more" %}
             </button>
   

@@ -23,3 +23,20 @@ document.querySelectorAll(".parent_g").forEach((item) => {
       }
   });
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const toggleBtn = document.getElementById('toggleBtn');
+  const hiddenItems = document.querySelectorAll('.more-item');
+  let expanded = false;
+
+  toggleBtn.addEventListener('click', function () {
+    expanded = !expanded;
+
+    hiddenItems.forEach(item => {
+      item.classList.toggle('hidden');
+    });
+
+    toggleBtn.textContent = expanded ? 'Show Less' : 'See More';
+  });
+});

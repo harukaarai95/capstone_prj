@@ -156,7 +156,8 @@ class CreateGenreView(LoginRequiredMixin, RoleRequiredMixin, CreateView):
         form.instance.image = self.request.FILES.get('image')
         return super().form_valid(form)
     
-class GenreListView(LoginRequiredMixin, generic.ListView):
+class GenreListView(LoginRequiredMixin, RoleRequiredMixin, generic.ListView):
+    allowed_roles = ['STAFF', 'MASTER']
     model = Genre
     template_name = 'genre_list.html'
     context_object_name = 'genres'
@@ -205,7 +206,7 @@ class DeleteGenreView(LoginRequiredMixin, RoleRequiredMixin, DeleteView):
 #### CUSTOMER VIEWS ###
 class CustomerProductListView(generic.ListView):
     model = Product
-    template_name = 'customer_product_list.html'
+    template_name = 'c_product_list.html'
     context_object_name = 'products'
    
     def get_queryset(self):
@@ -381,3 +382,8 @@ class PurchaseHistoryView(LoginRequiredMixin, ListView):
         context['product_instances'] = product_instances
 
         return context
+
+class CustomerGenreDetailView(DetailView):
+    model = Genre
+    template_name = 'c_genre_detail.html'
+    context_object_name = 'genre'
