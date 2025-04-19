@@ -29,5 +29,4 @@ urlpatterns = [
     path('purchase_all/', views.purchase_all, name='purchase_all'),
     path('order_history/',views.PurchaseHistoryView.as_view(), name='order_history'),
 
-
 ]

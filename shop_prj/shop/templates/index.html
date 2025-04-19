@@ -78,7 +78,7 @@ Home
         </div>
         {% comment %} for mobile cart {% endcomment %}
         <div class="lg:hidden absolute top-8 right-4 z-90">
-            <a href=""><i class="fa-solid fa-cart-shopping fa-xl"></i></a>
+            <a href="{% url "c_cart_detail" %}"><i class="fa-solid fa-cart-shopping fa-xl"></i></a>
         </div>
          {% comment %} for desktop {% endcomment %}
          <ul class="hidden lg:flex absolute top-15 right-20 items-center justify-center gap-8 w-60 h-15 nav-i-wrap">
