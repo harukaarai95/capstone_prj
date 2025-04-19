@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% block title %}
+{% if user.username %}{{user.username}}{% endif %} | Profile
+{% endblock %}
+
+{% block top_content %}
+<div class="content-wrap pt-8 pb-4">
+    <h2 class="text-4xl">
+    {% if user.username %}{{user.username}}{% else %}{{user.first_name}}{% endif %}'s Profile
+    </h2>
+</div>
+{% endblock top_content%}
+
+{% block main_content %}
+<div class="relative bottom-17 w-full ">
+    <table class="table-auto w-auto border mx-auto border-gray-300">
+        <tbody>
+            <tr>
+                <th class="px-4 py-2 border border-gray-300 text-left">ID</th>
+                <td class="px-4 py-2 border border-gray-300">{{ user.id }}</td>
+            </tr>
+            <tr>
+              <th class="px-4 py-2 border border-gray-300 text-left">Email</th>
+              <td class="px-4 py-2 border border-gray-300">{{ user.email }}</td>
+          </tr>
+            <tr>
+                <th class="px-4 py-2 border border-gray-300 text-left">Username</th>
+                <td class="px-4 py-2 border border-gray-300">{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th class="px-4 py-2 border border-gray-300 text-left">Name</th>
+                <td class="px-4 py-2 border border-gray-300">{{ user.first_name }} {{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <th class="px-4 py-2 border border-gray-300 text-left">Address</th>
+                <td class="px-4 py-2 border border-gray-300">{{user.postal_code}}</br>{{ user.address }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="mt-4 flex items-center justify-center">
+        <a href="{% url "c_user_edit" request.user.id %}" class="font-bold text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</a>
+    </div>
+</div>
+
+{% endblock %}

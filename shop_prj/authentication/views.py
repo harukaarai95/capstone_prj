@@ -121,3 +121,32 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         
         raise PermissionDenied(_("You do not have permission to delete this user."))
+    
+
+class CustomerUserDetailView(LoginRequiredMixin, generic.DetailView):
+    model = User
+    template_name = 'authentication/c_user_detail.html'
+    context_object_name = 'user'
+
+class CustomerUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    template_name = 'authentication/c_user_edit.html'
+    fields = ['username', 'first_name', 'last_name', 'email', 'postal_code', 'address']
+    
+    def get_success_url(self):
+        return reverse_lazy('c_user_detail', kwargs={'pk': self.object.pk})
+
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        return form
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+
+        if request.user.role == User.CUSTOMER and request.user.pk == obj.pk:
+            return super().dispatch(request, *args, **kwargs)
+
+        if request.user.role in [User.MASTER, User.STAFF] or request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+
+        raise PermissionDenied(_("You do not have permission to access this page."))

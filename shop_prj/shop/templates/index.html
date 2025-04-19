@@ -47,7 +47,7 @@ Home
                </li>
                {% if user.is_authenticated %}
                 <li class="block w-60">
-                    <a href="" class="w-full flex items-center justify-between">
+                    <a href="{% url "c_user_detail" request.user.id%}" class="w-full flex items-center justify-between">
                         <span class="flex gap-4 items-center justify-between">
                             <i class="fa-solid fa-user"></i>
                             {% trans "Profile"%}
@@ -89,7 +89,7 @@ Home
             <li class="w-full text-center text-xl"><a href="{% url "customer_goods" %}" class="transition-colors duration-500">Goods</a></li>
             <li class="w-full text-center text-xl"><a href="{% url "c_cart_detail" %}" class="transition-colors duration-500">{% trans "Cart"%}</a></li>
             {% if user.is_authenticated %}
-            <li class="w-full text-center text-xl"><a href="" class="transition-colors duration-500">{% trans "Profile"%}</a></li>
+            <li class="w-full text-center text-xl"><a href="{% url "c_user_detail" request.user.id %}" class="transition-colors duration-500">{% trans "Profile"%}</a></li>
             <li class="w-full text-center text-xl"><a href="{% url "logout" %}" class="transition-colors duration-500">{% trans "Logout"%}</a></li>
             {% else %}
             <li class="w-full text-center text-xl"><a href="{% url "login" %}" class="transition-colors duration-500">{% trans "Login"%}</a></li>
