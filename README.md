@@ -27,11 +27,11 @@ In this application, master and staff users can register, view, update, and dele
 
 ## Setup
 1. Clone repository
-   `git clone https://github.com/harukaarai95/capstone_prj.git`
+   `git clone https://github.com/harukaarai95/capstone_prj.git`   
    `cd shop_prj`
 3. Activate a virtual environment
-   `python -m venv capstoneVenv`
-   Windows: `venv\Scripts\activate`
+   `python -m venv capstoneVenv`   
+   Windows: `venv\Scripts\activate`   
    Mac: `source venv/bin/activate`
 5. Install a required package
    `pip install -r requirements.txt`
