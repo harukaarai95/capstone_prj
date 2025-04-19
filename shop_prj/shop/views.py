@@ -1,7 +1,3 @@
-# from django.shortcuts import render
-
-# from django.http import HttpResponse
-# from django.template import loader
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixins import RoleRequiredMixin
@@ -18,22 +14,53 @@ from django.db.models import Count
 from django.http import JsonResponse
 from django.views.generic import DetailView, TemplateView, ListView
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 
 def home(request):
     featured_products = Product.objects.filter(is_featured=True).prefetch_related('images')
-        # pass the context
     context = {
-            # 'num_items': num_items,
-            # 'user_role': user_role if request.user.is_authenticated else None,
             'featured_products': featured_products,
-            # 'username': username if request.user.username else None,
         }
     return render(request, 'index.html', context)
 
 @login_required
 @role_required(allowed_roles=['STAFF', 'MASTER'])
 def staff_home(request):
-    return render(request, 'staff.html')
+    num_visits = request.session.get('num_visits', 0)
+    num_visits += 1
+    request.session['num_visits'] = num_visits
+
+    registerd_products = Product.objects.count()
+    on_sale_products = Product.objects.filter(status="ON_SALE")
+    featured_products = Product.objects.filter(is_featured=True).prefetch_related('images')
+    other_products = Product.objects.filter(status="ON_SALE", is_featured=False)
+
+    User = get_user_model()
+    user_count = User.objects.count()
+
+    undelivered_items = ProductInstance.objects.exclude(status='Delivered').count()
+    need_to_confirm_items = ProductInstance.objects.filter(status='in_cart').count()
+    need_to_ship_items = ProductInstance.objects.filter(status='confirmed').count()
+
+    popular_products = ProductInstance.objects.filter(status='Delivered').values('product__pname', 'product').annotate(count=Count('id')).order_by('-count')[:5]
+    top_5_products = [
+    {'pname': item['product__pname'], 'id': item['product'], 'count': item['count']}
+    for item in popular_products
+    ]
+
+    context = {
+        'num_visits': num_visits,
+        'registerd_products': registerd_products,
+        'featured_products': featured_products,
+        'on_sale_products': on_sale_products,
+        'other_products': other_products,
+        'user_count': user_count,
+        'undelivered_items': undelivered_items,
+        'need_to_confirm_items': need_to_confirm_items,
+        'need_to_ship_items': need_to_ship_items,
+        'top_5_products': top_5_products,
+    }
+    return render(request, 'staff.html', context)
 
 class CreateProductView(LoginRequiredMixin, RoleRequiredMixin, generic.CreateView):
     allowed_roles = ['STAFF', 'MASTER']

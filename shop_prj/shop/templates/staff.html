@@ -74,11 +74,41 @@ Home
 {% endblock top_content%}
 {% block main_content %}
 <div class="sm:ml-64 p-2">
-<ul>
-    <li>Registered User:</li>
-    <li>Page Viewed by:</li>
-    <li>Product Info</li>
-</ul>
+    <div class="mx-[5%]">
+        <p>Registered User: {{user_count}}</p>
+        <p>Visited in the last 24 hours: {{num_visits}} viewer(s)</p>
+        <div class="grid grid-cols-2 gap-4 mt-4">
+            <div class="border p-2 rounded bg-emerald-100 hover:bg-emerald-200">
+                <a href="{% url "carts" %}">
+                <h2 class="text-xl">Order Summary</h2>
+                <p>Action required items: {{undelivered_items}}</p>
+                <p>Waiting for shipping items: {{need_to_ship_items}}</p>
+                <p>Waiting for confirmation items: {{need_to_confirm_items}}</p>
+                </a>
+            </div>
+            {% if top_5_products %}
+            <div class="border p-2 rounded bg-amber-100 hover:bg-amber-200">
+                <h2 class="text-xl">Top 5 popular items</h2>
+                {% for item in top_5_products %}
+                <ul>
+                    <li>- <a href="{% url 'product_detail' item.id %}" class="underline">
+                        {{ item.pname }} ({{ item.count }} times)
+                    </a></li>
+                </ul>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="border p-2 rounded bg-rose-100 hover:bg-rose-200">
+                <a href="{% url "products" %}">
+                    <h2 class="text-xl">Products Summary</h2>
+                    <p>Items Registered: {{registerd_products}}</p>
+                    <p>Current featured items: {{featured_products.count}}</p>
+                    <p>Available items: {{on_sale_products.count}}</p>
+                    <p>Regular items: {{other_products.count}}</p>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock main_content%}
 
