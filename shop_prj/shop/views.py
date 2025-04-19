@@ -12,11 +12,12 @@ from authentication.models import User
 from .models import Product, ProductImage, Genre, ProductInstance, Cart
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy, reverse
-from .forms import ProductForm, ImageForm, GenreForm
+from .forms import ProductForm, ImageForm, GenreForm, ChangeCartStatusForm
 from django.forms import modelformset_factory, inlineformset_factory
 from django.db.models import Count
 from django.http import JsonResponse
 from django.views.generic import DetailView, TemplateView, ListView
+from django.contrib import messages
 
 def home(request):
     featured_products = Product.objects.filter(is_featured=True).prefetch_related('images')
@@ -202,7 +203,70 @@ class DeleteGenreView(LoginRequiredMixin, RoleRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('genres')
+
+class CartListView(LoginRequiredMixin, RoleRequiredMixin, generic.ListView):
+    allowed_roles = ['STAFF', 'MASTER']
+    model = Cart
+    context_object_name = 'cart_list'
+    template_name = 'cart_list.html'
+
+    def get_queryset(self):
+        carts = Cart.objects.all()
+        for cart in carts:
+            cart.filtered_items = cart.items.exclude(status='Confirmed')
+            cart.filtered_items_count = cart.filtered_items.count()
+        return carts
+
+class CartDetailView(LoginRequiredMixin, RoleRequiredMixin, generic.DetailView):
+    allowed_roles = ['STAFF', 'MASTER']
+    model = Cart
+    template_name = 'cart_detail.html'
+    context_object_name = 'cart'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        items = self.object.items.exclude(status='Delivered')
+        completed_items = self.object.items.filter(status='Delivered')
+        total = sum(item.subtotal for item in items)
+        purchased_total = sum(item.subtotal for item in completed_items)
+
+        context['filtered_items'] = items
+        context['completed_items'] = completed_items
+        context['total'] = total
+        context['purchased_total'] = purchased_total
+        return context
+
+class ChangeCartStatusView(LoginRequiredMixin, RoleRequiredMixin, UpdateView):
+    allowed_roles = ['STAFF', 'MASTER']
+    model = ProductInstance
+    form_class= ChangeCartStatusForm
+    template_name = 'change_cart_status.html'
+    context_object_name = 'cart_status'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product'] = self.object.product
+        return context
+
+    def form_valid(self, form):
+        cart_item = form.save(commit=False)
+        cart_item.status = form.cleaned_data['status']
+        cart_item.save()
+        
+        if cart_item.cart and cart_item.cart.pk:
+            messages.success(self.request, f"{cart_item.product.pname}'s status has been updated.")
+            return redirect('cart_detail', pk=cart_item.cart.pk)
+        else:
+            messages.error(self.request, "cart not found.")
+            return redirect('carts')
+
+    def get_success_url(self):
+        if self.object.basket and self.object.basket.pk:
+            return reverse_lazy('cart_detail', kwargs={'pk': self.object.basket.pk})
+        else:
+            return reverse_lazy('carts')
+  
+
 #### CUSTOMER VIEWS ###
 class CustomerProductListView(generic.ListView):
     model = Product
@@ -290,7 +354,7 @@ def add_to_cart(request, product_id):
 
 
 class CustomerCartDetail(LoginRequiredMixin, TemplateView):
-    template_name = 'cart_detail.html'
+    template_name = 'c_cart_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

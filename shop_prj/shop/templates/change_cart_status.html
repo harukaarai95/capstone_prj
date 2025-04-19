@@ -1,0 +1,30 @@
+{% extends "staff.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}
+{% trans "Cart Status"%}
+{% endblock %}
+
+{% block top_content %}
+<div class="sm:ml-64 text-center py-2 px-2">
+    <h1 class="text-3xl m-2">{{user.username}}{%trans "'s Cart"%}</h1>
+    <h2 class="text-2xl">{%trans "Change the"%} <span class="font-bold">{{ product.pname }}</span>{%trans "'s status"%}</h2>
+</div>
+{% endblock top_content%}
+
+{% block main_content %}
+<div class="sm:ml-64 p-2 text-center">
+    {% if product.images.first %}
+        <img src="{{ product.images.first.image.url }}" alt="{{one.product.pname}}" class="mx-auto w-42 h-42 cover">
+    {% endif %}
+    <div class="flex justify-center">
+        <form method="POST" class="my-5">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="mt-4 border p-2 rounded bg-sky-50 hover:bg-sky-200">{%trans "Change"%}</button>
+        </form>
+    </div>
+      <a class="underline" href="{% url 'cart_detail' pk=cart_status.cart.pk %}">{%trans "Back to the Cart"%}</a>
+</div>
+
+{% endblock %}

@@ -19,7 +19,10 @@ urlpatterns = [
     path('staff/genre/<int:pk>/', views.GenreDetailView.as_view(), name='genre_detail'),
     path('staff/genre/<int:pk>/edit/', views.EditGenreView.as_view(), name='genre_edit'),
     path('staff/genre/<int:pk>/delete/', views.DeleteGenreView.as_view(), name='genre_delete'),
-    path('c_genre/<int:pk>', views.CustomerGenreDetailView.as_view(), name='customer_genre_detail'),
+    path('staff/carts/', views.CartListView.as_view(), name='carts'),
+    path('staff/cart/<int:pk>/', views.CartDetailView.as_view(), name='cart_detail'),
+    path('staff/order_status/<uuid:pk>', views.ChangeCartStatusView.as_view(), name='order_status'),
+    path('c_genre/<int:pk>/', views.CustomerGenreDetailView.as_view(), name='customer_genre_detail'),
     path('goods/', views.CustomerProductListView.as_view(), name='customer_goods'),
     path('goods/<int:pk>/', views.CustomerProductDetailView.as_view(), name='customer_goods_detail'),
     path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
@@ -29,5 +32,6 @@ urlpatterns = [
     path('purchase/<int:product_id>/', views.purchase_item, name='purchase_item'),
     path('purchase_all/', views.purchase_all, name='purchase_all'),
     path('order_history/',views.PurchaseHistoryView.as_view(), name='order_history'),
+
 
 ]

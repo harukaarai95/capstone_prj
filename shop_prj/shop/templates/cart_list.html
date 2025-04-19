@@ -1,0 +1,48 @@
+{% extends "staff.html" %}
+{% load i18n %}
+{% block title %}
+{% trans "Cart List"%}
+{% endblock %}
+
+{% block top_content %}
+<div class="sm:ml-64 text-center py-2 px-2">
+    <h1 class="text-3xl">{% trans "Cart List" %}</h1>
+</div>
+{% endblock top_content%}
+
+{% block main_content %}
+<div class="sm:ml-64 p-2">
+<div class="container">
+<p>{% trans "Current Role:"%} {{ user.role }}</p>
+{% if cart_list %}
+<div class="mx-[5%] mt-5">
+    <table class="w-full border-collapse border border-gray-300 text-left shadow-lg">
+        <thead class="bg-gray-100 text-gray-700">
+            <tr>
+                <th scope="col" class="px-4 py-2 border border-gray-300">No.</th>
+                <th scope="col" class="px-4 py-2 border border-gray-300">{%trans "Username"%}</th>
+                <th scope="col" class="px-4 py-2 border border-gray-300">{%trans "Created at"%}</th>
+                <th scope="col" class="px-4 py-2 border border-gray-300">{%trans "Items in Cart"%}</th>
+                <th scope="col" class="px-4 py-2 border border-gray-300">{%trans "See more"%}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for one in cart_list %}
+            <tr>
+                <td class="px-4 py-2 border border-gray-300">{{one.id}}</td>
+                {% comment %} refer from user database > username {% endcomment %}
+                <td class="px-4 py-2 border border-gray-300">{{one.user.username}}</td>
+                <td class="px-4 py-2 border border-gray-300">{{one.created_at}}</td>
+                <td class="px-4 py-2 border border-gray-300">{{one.filtered_items_count}}</td>
+                <td class="px-4 py-2 border border-gray-300"><a href="{% url "cart_detail" one.id %}" ><i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+{% else %}
+<p>{% trans "There are no cart."%}</p>
+{% endif %}
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import Product, ProductImage, Genre
+from .models import Product, ProductImage, Genre, ProductInstance
 from authentication.models import User
 
 class ProductForm(forms.ModelForm):
@@ -46,3 +46,12 @@ class GenreForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'input input-bordered rounded', 'placeholder': 'input category name'}),
         }
 
+class ChangeCartStatusForm(forms.ModelForm):
+    class Meta:
+        model = ProductInstance
+        fields = ['status']
+        labels = {'status': 'Please slect the status.'}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs) 
+        self.fields['status'].choices = ProductInstance.ORDER_STATUS
