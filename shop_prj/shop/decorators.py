@@ -12,13 +12,3 @@ def role_required(allowed_roles=[]):
             return view_func(request, *args, **kwargs)
         return _wrapped_view
     return decorator
-
-
-#how to use
-# from django.contrib.auth.decorators import login_required
-# from .decorators import role_required
-
-# @login_required
-# @role_required(allowed_roles=['STAFF', 'MASTER'])
-# def staff_home(request):
-#     return render(request, 'staff.html')
