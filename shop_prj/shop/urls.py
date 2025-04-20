@@ -32,6 +32,4 @@ urlpatterns = [
     path('purchase/<int:product_id>/', views.purchase_item, name='purchase_item'),
     path('purchase_all/', views.purchase_all, name='purchase_all'),
     path('order_history/',views.PurchaseHistoryView.as_view(), name='order_history'),
-
-
 ]
