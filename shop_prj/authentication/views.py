@@ -59,7 +59,7 @@ def signup_view(request):
             if not request.user.is_authenticated or request.user.role not in ["STAFF", "OWNER"]:
                 user.role = "CUSTOMER"  # set as customer
             user.save()
-            return redirect('home')
+            return redirect('login')
     
     return render(request, 'registration/signup.html', context={'form': form})
 

@@ -416,6 +416,8 @@ def remove_from_cart(request, product_id):
 
 @login_required
 def update_cart(request, product_id):
+    print("Request method:", request.method)
+    print("POST data:", request.POST)
     if request.method == "POST":
         product = get_object_or_404(Product, id=product_id)
         amount = request.POST.get("amount")
@@ -429,14 +431,16 @@ def update_cart(request, product_id):
             return JsonResponse({"success": False, "error": "Invalid amount"}, status=400)
 
         cart = Cart.objects.filter(user=request.user).first()
-        product_instance, created = ProductInstance.objects.get_or_create(
-            cart=cart, product=product, defaults={'amount': amount}
-        )
-        if not created:
+        if not cart:
+            return JsonResponse({"success": False, "error": "Cart not found"}, status=404)
+
+        product_instance = ProductInstance.objects.filter(cart=cart, product=product).first()
+
+        if product_instance:
             product_instance.amount = amount
             product_instance.save()
-
-        return JsonResponse({"success": True})
+        else:
+            ProductInstance.objects.create(cart=cart, product=product, amount=amount)
 
     return JsonResponse({"success": False, "error": "Invalid request method"}, status=405)
 
