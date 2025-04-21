@@ -9,7 +9,9 @@ class ProductForm(forms.ModelForm):
         fields = ['pname', 'description', 'price','genre', 'status', 'is_featured']
         widgets = {
             'genre': forms.CheckboxSelectMultiple(),
-
+        }
+        labels = {
+            'genre': 'categories',
         }
 
 class ImageForm(forms.ModelForm):

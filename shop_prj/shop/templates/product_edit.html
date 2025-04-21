@@ -48,7 +48,7 @@ Edit Prodcut
     <h2 class="font-bold text-lg">Existing Images</h2>
     {% for image in images %}
         <div class="border border-gray-300 p-2 mt-2">
-            <img src="{% if image.image %}{{ image.image.url }}{% else %}/media/images/snowman.png{% endif %}" alt="{{ image.alt }}" class="w-32 h-32 object-cover">
+            <img src="{% if image.image %}{{ image.image.url }}{% else %}/media/images/snowman.png{% endif %}" alt="{{ image.alt }}" class="w-32 h-32 object-cover m-2">
             <form method="POST" enctype="multipart/form-data" class="space-y-4">
                 {% csrf_token %}
                 <input type="hidden" name="image_id" value="{{ image.id }}">
@@ -76,7 +76,7 @@ Edit Prodcut
         <button type="submit" name="add_image" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Image</button>
     </form>
     <br>
-    <a href="" class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete Item</a>
+    <a href="{% url "product_delete" product.id %}" class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete Item</a>
     <br>
     <a href="{% url 'products' %}" class="underline text-blue-500">Back to Product List</a>
     </div>

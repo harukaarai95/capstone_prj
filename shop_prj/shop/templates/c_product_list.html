@@ -164,7 +164,7 @@ Goods
                                         {% for genre_item in genre_products %}
                                         {% if genre_item.genre.id == item.id %}
                                             {% for product in genre_item.products %}
-                                                <p class="text-md m-3 decoration-[#bebebe]"><a href="{{product.get_absolute_url}}" class="underline"> {{ product.pname }} </a></p>
+                                                <p class="text-md m-3 decoration-[#bebebe]"><a href="{% url "customer_goods_detail" product.id %}" class="underline"> {{ product.pname }} </a></p>
                                             {% empty %}
                                                 <p>{% trans "No products available." %}</p>
                                             {% endfor %}
