@@ -11,7 +11,7 @@ class ProductForm(forms.ModelForm):
             'genre': forms.CheckboxSelectMultiple(),
         }
         labels = {
-            'genre': 'categories',
+            'genre': 'Categories',
         }
 
 class ImageForm(forms.ModelForm):
