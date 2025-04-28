@@ -24,9 +24,9 @@
                         <p>${{ item.product.price }}</p>
                         <div class="flex gap-2 items-center">
                             <p>{% trans "quantity:" %}</p>
-                            <form class="update-cart-form" data-product-id="{{ item.product.id }}" method="POST">
+                            <form class="update-cart-form relative" data-product-id="{{ item.product.id }}" method="POST">
                                 {% csrf_token %}
-                                <input type="number" name="amount" value="{{ item.amount }}" min="1" class="w-12 p-1 border relative">
+                                <input type="number" name="amount" value="{{ item.amount }}" min="1" class="w-12 p-1 border">
                                 <button type="submit" class="underline block absolute right-[20%]">{% trans "Save" %}</button>
                             </form>
                         </div>

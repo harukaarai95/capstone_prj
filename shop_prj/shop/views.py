@@ -442,6 +442,8 @@ def update_cart(request, product_id):
         else:
             ProductInstance.objects.create(cart=cart, product=product, amount=amount)
 
+        return JsonResponse({"success": True})
+
     return JsonResponse({"success": False, "error": "Invalid request method"}, status=405)
 
 
