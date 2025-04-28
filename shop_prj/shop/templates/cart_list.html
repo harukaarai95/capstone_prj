@@ -21,6 +21,7 @@
             <tr>
                 <th scope="col" class="px-4 py-2 border border-gray-300">No.</th>
                 <th scope="col" class="px-4 py-2 border border-gray-300">{%trans "Username"%}</th>
+                <th scope="col" class="px-4 py-2 border border-gray-300">{%trans "Email"%}</th>
                 <th scope="col" class="px-4 py-2 border border-gray-300">{%trans "Created at"%}</th>
                 <th scope="col" class="px-4 py-2 border border-gray-300">{%trans "Items in Cart"%}</th>
                 <th scope="col" class="px-4 py-2 border border-gray-300">{%trans "See more"%}</th>
@@ -30,8 +31,8 @@
             {% for one in cart_list %}
             <tr>
                 <td class="px-4 py-2 border border-gray-300">{{one.id}}</td>
-                {% comment %} refer from user database > username {% endcomment %}
                 <td class="px-4 py-2 border border-gray-300">{{one.user.username}}</td>
+                <td class="px-4 py-2 border border-gray-300">{{one.user.email}}</td>
                 <td class="px-4 py-2 border border-gray-300">{{one.created_at}}</td>
                 <td class="px-4 py-2 border border-gray-300">{{one.filtered_items_count}}</td>
                 <td class="px-4 py-2 border border-gray-300"><a href="{% url "cart_detail" one.id %}" ><i class="fa-solid fa-arrow-up-right-from-square"></i></a></td>
