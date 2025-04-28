@@ -38,15 +38,23 @@ In this application, master and staff users can register, view, update, and dele
 7. Run development server   
    `py manage.py runserver`
 9. Demo account
-   - Master
-     Email: admin@mail.com
-     Password: admin123
+   - Master   
+     Email: admin@mail.com   
+     Password: admin123   
    - Staff
-     Email: staff@mail.com
-     Password: 95123pass
+     Email: staff@mail.com   
+     Password: 95123pass   
    - Customer
-     Email: test@mail.com
-     Password: 95123pass
+     Email: test@mail.com   
+     Password: 95123pass   
+
+## Screenshots
+### - User Goods View -
+![screenshot_goods](https://github.com/user-attachments/assets/eb17f436-266f-43a2-964b-4da7ec76a526)
+
+### - Staff Home VIew -
+![screenshot_staff](https://github.com/user-attachments/assets/4411492b-032d-443e-bc75-6e8a78d1ecce)
+
 
 ## License
 This project is licensed under the MIT License.
